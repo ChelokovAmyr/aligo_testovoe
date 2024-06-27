@@ -4,8 +4,11 @@ import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 
 import {ref} from 'vue';
   const inputNumber = ref('');
-
+  const page = ref(0);
   const numbersArray = ref([]);
+  const updateHandler = (page:number) => {
+    console.log(page)
+  }
 </script>
 
 <template>
@@ -83,8 +86,9 @@ import {ref} from 'vue';
     <div class="pagination-section">
       <v-pagination
           v-model="page"
-          :pages="10"
-          :range-size="1"
+          :pages="3"
+          hideFirstButton
+          hideLastButton
           active-color="#DCEDFF"
           @update:modelValue="updateHandler"
       />
