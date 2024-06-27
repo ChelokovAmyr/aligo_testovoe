@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import VPagination from "@hennge/vue3-pagination";
+import "@hennge/vue3-pagination/dist/vue3-pagination.css";
+
 import {ref} from 'vue';
   const inputNumber = ref('');
 
@@ -78,7 +81,13 @@ import {ref} from 'vue';
       </div>
     </div>
     <div class="pagination-section">
-
+      <v-pagination
+          v-model="page"
+          :pages="10"
+          :range-size="1"
+          active-color="#DCEDFF"
+          @update:modelValue="updateHandler"
+      />
     </div>
     <h2 class="popular-section__heading">Популярные объявления</h2>
     <div class="elements-section">
@@ -289,6 +298,12 @@ import {ref} from 'vue';
     text-align: center;
     font-weight: 400;
     margin-top: 46px;
+  }
+  .pagination-section{
+    margin-top: 46px;
+    border-radius: 16px;
+    border: 1px solid black;
+    padding: 17px 28px;
   }
 </style>
 
