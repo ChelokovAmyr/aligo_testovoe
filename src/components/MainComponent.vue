@@ -21,6 +21,12 @@ import ElementComponent from "@/components/ElementComponent.vue";
     return cardsArray.value.slice(indexStart.value, indexEnd.value).filter((el)=> {
       if (sameLettersCheck.value) {
         return new RegExp(/([a-zA-Z])(?=(?:.*?\1){2})/).test(el.serialNumber)
+      } else if (sameNumberCheck.value){
+        let number = el.serialNumber.replace(/\D/g,'');
+        return number.split('').every(v => v === number.split('')[0]);
+      } else if (mirrorsNumberCheck.value) {
+        let number = el.serialNumber.replace(/\D/g,'');
+        return number === number.toString().split('').reverse().join('');
       } else {
         return el.serialNumber.toUpperCase().includes(inputNumber.value.toUpperCase())
       }
