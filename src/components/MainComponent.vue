@@ -6,7 +6,7 @@ import {ref, computed} from 'vue';
 import ElementComponent from "@/components/ElementComponent.vue";
   const inputNumber = ref('');
 
-  const pageSize = ref(10);
+  const pageSize = ref(12);
 
   const currentPage = ref(1)
 
@@ -20,6 +20,19 @@ import ElementComponent from "@/components/ElementComponent.vue";
   const paginatedArray = computed(()=> {
     return cardsArray.value.slice(indexStart.value, indexEnd.value);
   })
+
+  const filterNumber = () => {
+    if (inputNumber.value !=='') {
+      cardsArray.value = cardsArray.value.filter((el)=> {
+        return el.serialNumber.includes(inputNumber.value)
+      })
+    }
+  }
+
+  const sameLettersCheck = ref(false);
+  const firstTenCheck = ref(false);
+  const sameNumberCheck = ref(false);
+  const mirrorsNumberCheck = ref(false);
 
   const cardsArray = ref([
     {serialNumber: 'А555АА', cityNumber: '61', dateNumber: '16.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '300000', rating: 1 },
@@ -79,7 +92,7 @@ import ElementComponent from "@/components/ElementComponent.vue";
           <div class="input-number-section">
             <span class="main-section__left__heading">Поиск номеров</span>
             <div class="input__number__wrap">
-              <input type="text" class="input__number" v-model="inputNumber" maxlength="6" minlength="6" placeholder="******">
+              <input type="text" class="input__number" v-model="inputNumber" @input="filterNumber" maxlength="6" minlength="6" placeholder="******">
               <div class="input-number__tail">
                 <span class="input-number__tail__star">*</span>
                 <div class="flag-section">
@@ -91,16 +104,16 @@ import ElementComponent from "@/components/ElementComponent.vue";
           </div>
           <div class="checkbox__wrap">
             <label class="checkbox__wrap__item">
-              <input type="checkbox" name="agree"><span>Одинаковые буквы</span>
+              <input type="checkbox" name="agree" v-model="sameLettersCheck"><span>Одинаковые буквы</span>
             </label>
             <label class="checkbox__wrap__item">
-              <input type="checkbox" name="agree"><span>Первая десятка</span>
+              <input type="checkbox" name="agree" v-model="firstTenCheck"><span>Первая десятка</span>
             </label>
             <label class="checkbox__wrap__item">
-              <input type="checkbox" name="agree"><span>Одинаковые цифры</span>
+              <input type="checkbox" name="agree" v-model="sameNumberCheck"><span>Одинаковые цифры</span>
             </label>
             <label class="checkbox__wrap__item">
-              <input type="checkbox" name="agree"><span>Зеркальные цифры</span>
+              <input type="checkbox" name="agree" v-model="mirrorsNumberCheck"><span>Зеркальные цифры</span>
             </label>
           </div>
         </div>
