@@ -18,15 +18,13 @@ import ElementComponent from "@/components/ElementComponent.vue";
     return indexStart.value + pageSize.value;
   })
   const paginatedArray = computed(()=> {
-    return cardsArray.value.slice(indexStart.value, indexEnd.value);
+    return cardsArray.value.slice(indexStart.value, indexEnd.value).filter((el)=> {
+      return el.serialNumber.toUpperCase().includes(inputNumber.value.toUpperCase())
+    });
   })
 
   const filterNumber = () => {
-    if (inputNumber.value !=='') {
-      cardsArray.value = cardsArray.value.filter((el)=> {
-        return el.serialNumber.includes(inputNumber.value)
-      })
-    }
+    console.log(1)
   }
 
   const sameLettersCheck = ref(false);
@@ -35,7 +33,7 @@ import ElementComponent from "@/components/ElementComponent.vue";
   const mirrorsNumberCheck = ref(false);
 
   const cardsArray = ref([
-    {serialNumber: 'А555АА', cityNumber: '61', dateNumber: '16.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '300000', rating: 1 },
+    {serialNumber: 'A555AA', cityNumber: '61', dateNumber: '16.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '300000', rating: 1 },
     {serialNumber: 'C799RE', cityNumber: '86', dateNumber: '04.07.2024', cityTitle: 'г. Москва',priceNumber: '527221', rating: 8 },
     {serialNumber: 'E555ED', cityNumber: '87', dateNumber: '16.07.2024', cityTitle: 'г. Верхоянск',priceNumber: '853907', rating: 4 },
     {serialNumber: 'А817АS', cityNumber: '49', dateNumber: '07.10.2024', cityTitle: 'г. Санкт-Петербург',priceNumber: '530411', rating: 10 },
