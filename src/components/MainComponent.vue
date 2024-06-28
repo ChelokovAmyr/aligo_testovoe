@@ -18,9 +18,11 @@ import ElementComponent from "@/components/ElementComponent.vue";
     return indexStart.value + pageSize.value;
   })
   const paginatedArray = computed(()=> {
-    return cardsArray.value.slice(indexStart.value, indexEnd.value).filter((el)=> {
+    return cardsArray.value.slice(indexStart.value, indexEnd.value).filter((el, index)=> {
       if (sameLettersCheck.value) {
         return new RegExp(/([a-zA-Z])(?=(?:.*?\1){2})/).test(el.serialNumber)
+      } else if (firstTenCheck.value) {
+        return index < 10;
       } else if (sameNumberCheck.value){
         let number = el.serialNumber.replace(/\D/g,'');
         return number.split('').every(v => v === number.split('')[0]);
