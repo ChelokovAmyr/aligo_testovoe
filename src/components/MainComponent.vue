@@ -19,13 +19,13 @@ import ElementComponent from "@/components/ElementComponent.vue";
   })
   const paginatedArray = computed(()=> {
     return cardsArray.value.slice(indexStart.value, indexEnd.value).filter((el)=> {
-      return el.serialNumber.toUpperCase().includes(inputNumber.value.toUpperCase())
+      if (sameLettersCheck.value) {
+        return new RegExp(/([a-zA-Z])(?=(?:.*?\1){2})/).test(el.serialNumber)
+      } else {
+        return el.serialNumber.toUpperCase().includes(inputNumber.value.toUpperCase())
+      }
     });
   })
-
-  const filterNumber = () => {
-    console.log(1)
-  }
 
   const sameLettersCheck = ref(false);
   const firstTenCheck = ref(false);
@@ -90,7 +90,7 @@ import ElementComponent from "@/components/ElementComponent.vue";
           <div class="input-number-section">
             <span class="main-section__left__heading">Поиск номеров</span>
             <div class="input__number__wrap">
-              <input type="text" class="input__number" v-model="inputNumber" @input="filterNumber" maxlength="6" minlength="6" placeholder="******">
+              <input type="text" class="input__number" v-model="inputNumber" maxlength="6" minlength="6" placeholder="******">
               <div class="input-number__tail">
                 <span class="input-number__tail__star">*</span>
                 <div class="flag-section">
