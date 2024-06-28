@@ -5,7 +5,22 @@ import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 import {ref, computed} from 'vue';
 import ElementComponent from "@/components/ElementComponent.vue";
   const inputNumber = ref('');
-  const page = ref(0);
+
+  const pageSize = ref(10);
+
+  const currentPage = ref(1)
+
+  const indexStart = computed(()=> {
+    return (currentPage.value - 1) * pageSize.value;
+  })
+
+  const indexEnd = computed(()=> {
+    return indexStart.value + pageSize.value;
+  })
+  const paginatedArray = computed(()=> {
+    return cardsArray.value.slice(indexStart.value, indexEnd.value);
+  })
+
   const cardsArray = ref([
     {serialNumber: 'А555АА', cityNumber: '61', dateNumber: '16.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '300000', rating: 1 },
     {serialNumber: 'C799RE', cityNumber: '86', dateNumber: '04.07.2024', cityTitle: 'г. Москва',priceNumber: '527221', rating: 8 },
@@ -40,14 +55,14 @@ import ElementComponent from "@/components/ElementComponent.vue";
 
   const selectCardsByDate = (option:string) => {
     if (option === 'new') {
-      cardsArray.value.sort(function(a, b){
+      paginatedArray.value.sort(function(a, b){
         let aa = a.dateNumber.split('.').reverse().join(),
             bb = b.dateNumber.split('.').reverse().join();
         return aa < bb ? -1 : (aa > bb ? 1 : 0);
       });
     }
     if (option === 'old') {
-      cardsArray.value.sort(function(a, b){
+      paginatedArray.value.sort(function(a, b){
         let aa = a.dateNumber.split('.').reverse().join(),
             bb = b.dateNumber.split('.').reverse().join();
         return bb < aa ? -1 : (bb > aa ? 1 : 0);
@@ -108,11 +123,11 @@ import ElementComponent from "@/components/ElementComponent.vue";
     </select>
     </div>
     <div class="elements-section">
-      <ElementComponent  v-for="(item,index) in cardsArray" :key="index" :item="item"/>
+      <ElementComponent  v-for="(item,index) in paginatedArray" :key="index" :item="item"/>
     </div>
     <div class="pagination-section">
       <v-pagination
-          v-model="page"
+          v-model="currentPage"
           :pages="Math.round(cardsArray.length / 10)"
           hideFirstButton
           hideLastButton
@@ -220,7 +235,8 @@ import ElementComponent from "@/components/ElementComponent.vue";
     align-items: center;
   }
   .input-number__tail__star{
-    font-size: 20px;
+    font-size: 60px;
+    height: 45px;
   }
   .select-wrap {
     display: flex;
