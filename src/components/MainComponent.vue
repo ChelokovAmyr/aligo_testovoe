@@ -2,15 +2,57 @@
 import VPagination from "@hennge/vue3-pagination";
 import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 import ElementComponent from "@/components/ElementComponent.vue";
   const inputNumber = ref('');
   const page = ref(0);
-  const numbersArray = ref([
-    {serialNumber: ''}
+  const cardsArray = ref([
+    {serialNumber: 'А555АА', cityNumber: '61', dateNumber: '16.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '300000', rating: 1 },
+    {serialNumber: 'C799RE', cityNumber: '86', dateNumber: '04.07.2024', cityTitle: 'г. Москва',priceNumber: '527221', rating: 8 },
+    {serialNumber: 'E555ED', cityNumber: '87', dateNumber: '16.07.2024', cityTitle: 'г. Верхоянск',priceNumber: '853907', rating: 4 },
+    {serialNumber: 'А817АS', cityNumber: '49', dateNumber: '07.10.2024', cityTitle: 'г. Санкт-Петербург',priceNumber: '530411', rating: 10 },
+    {serialNumber: 'B841PF', cityNumber: '97', dateNumber: '28.11.2024', cityTitle: 'г. Владивосток',priceNumber: '130789', rating: 2 },
+    {serialNumber: 'G230OА', cityNumber: '99', dateNumber: '23.10.2024', cityTitle: 'г. Сызрань',priceNumber: '627764', rating: 6 },
+    {serialNumber: 'L929BА', cityNumber: '94', dateNumber: '16.10.2024', cityTitle: 'г. Кызыл',priceNumber: '736318', rating: 7 },
+    {serialNumber: 'L929BА', cityNumber: '93', dateNumber: '14.10.2024', cityTitle: 'г. Верхние Луки',priceNumber: '805267', rating: 5 },
+    {serialNumber: 'L929BА', cityNumber: '78', dateNumber: '24.12.2024', cityTitle: 'г. Севастополь',priceNumber: '544087', rating: 8 },
+    {serialNumber: 'L929BА', cityNumber: '52', dateNumber: '11.10.2024', cityTitle: 'г. Нижнекамск',priceNumber: '914610', rating: 5 },
+    {serialNumber: 'L929BА', cityNumber: '45', dateNumber: '27.12.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '770881', rating: 7 },
+    {serialNumber: 'L929BА', cityNumber: '93', dateNumber: '05.09.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '406419', rating: 8 },
+    {serialNumber: 'L929BА', cityNumber: '11', dateNumber: '01.10.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '553058', rating: 9 },
+    {serialNumber: 'L929BА', cityNumber: '97', dateNumber: '11.10.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '829569', rating: 7 },
+    {serialNumber: 'L929BА', cityNumber: '53', dateNumber: '09.10.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '343494', rating: 10 },
+    {serialNumber: 'L929BА', cityNumber: '70', dateNumber: '23.09.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '381580', rating: 1 },
+    {serialNumber: 'L929BА', cityNumber: '55', dateNumber: '25.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '202566', rating: 6 },
+    {serialNumber: 'L929BА', cityNumber: '38', dateNumber: '16.08.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '459990', rating: 10 },
+    {serialNumber: 'L929BА', cityNumber: '92', dateNumber: '08.07.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '297686', rating: 2 },
+    {serialNumber: 'L929BА', cityNumber: '65', dateNumber: '05.11.2024', cityTitle: 'г. Ростов-на-Дону',priceNumber: '126762', rating: 9 },
   ]);
+
+  const popularCard = computed(()=> {
+    return JSON.parse(JSON.stringify(cardsArray.value)) .slice(0,8).sort((a, b) => b.rating - a.rating)
+  })
   const updateHandler = (page:number) => {
     console.log(page)
+  }
+
+  const selectCardsByDateValue = ref('new')
+
+  const selectCardsByDate = (option:string) => {
+    if (option === 'new') {
+      cardsArray.value.sort(function(a, b){
+        let aa = a.dateNumber.split('.').reverse().join(),
+            bb = b.dateNumber.split('.').reverse().join();
+        return aa < bb ? -1 : (aa > bb ? 1 : 0);
+      });
+    }
+    if (option === 'old') {
+      cardsArray.value.sort(function(a, b){
+        let aa = a.dateNumber.split('.').reverse().join(),
+            bb = b.dateNumber.split('.').reverse().join();
+        return bb < aa ? -1 : (bb > aa ? 1 : 0);
+      });
+    }
   }
 </script>
 
@@ -22,7 +64,7 @@ import ElementComponent from "@/components/ElementComponent.vue";
           <div class="input-number-section">
             <span class="main-section__left__heading">Поиск номеров</span>
             <div class="input__number__wrap">
-              <input type="text" class="input__number" v-model="inputNumber" maxlength="6" minlength="6">
+              <input type="text" class="input__number" v-model="inputNumber" maxlength="6" minlength="6" placeholder="******">
               <div class="input-number__tail">
                 <span class="input-number__tail__star">*</span>
                 <div class="flag-section">
@@ -56,22 +98,22 @@ import ElementComponent from "@/components/ElementComponent.vue";
         </div>
     </div>
     <div class="select-wrap">
-    <select class="select__main">
-      <option class="option__main">
+    <select class="select__main" v-model="selectCardsByDateValue" @change="selectCardsByDate(selectCardsByDateValue)">
+      <option class="option__main" value="new">
         Сначала свежие
       </option>
-      <option>
+      <option class="option__main" value="old">
         Сначала старые
       </option>
     </select>
     </div>
     <div class="elements-section">
-      <ElementComponent  v-for="(item,index) in 12" :key="index"/>
+      <ElementComponent  v-for="(item,index) in cardsArray" :key="index" :item="item"/>
     </div>
     <div class="pagination-section">
       <v-pagination
           v-model="page"
-          :pages="3"
+          :pages="Math.round(cardsArray.length / 10)"
           hideFirstButton
           hideLastButton
           active-color="#DCEDFF"
@@ -80,7 +122,7 @@ import ElementComponent from "@/components/ElementComponent.vue";
     </div>
     <h2 class="popular-section__heading">Популярные объявления</h2>
     <div class="elements-section">
-      <ElementComponent  v-for="(item,index) in 12" :key="index"/>
+      <ElementComponent  v-for="(item,index) in popularCard" :key="index" :item="item"/>
     </div>
   </div>
 </template>
@@ -160,6 +202,13 @@ import ElementComponent from "@/components/ElementComponent.vue";
     padding: 11px;
     font-size: 20px;
     text-align: center;
+    &::placeholder{
+      position: absolute;
+      left: 0;
+      right: 0;
+      font-size: 40px;
+      color: black;
+    }
   }
   .input-number__tail{
     padding: 11px;

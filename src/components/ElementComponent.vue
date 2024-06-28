@@ -1,16 +1,17 @@
 <script setup lang="ts">
-
+import {defineProps} from 'vue'
+const props = defineProps(['item'])
 </script>
 
 <template>
   <div class="element__item">
-    <p class="element__item__date">25.09.23</p>
+    <p class="element__item__date">{{item.dateNumber}}</p>
     <div class="element__item__inner">
       <div class="element__item__number">
-        <strong><span class="element__item__number__small">А</span>555<span class="element__item__number__small">АА</span></strong>
+        <strong><span class="element__item__number__small">{{item.serialNumber.slice(0,1)}}</span>{{item.serialNumber.slice(1,4)}}<span class="element__item__number__small">{{item.serialNumber.slice(4,6)}}</span></strong>
       </div>
       <div class="element__item__flag">
-        <span class="element__item__flag__region"><strong>61</strong></span>
+        <span class="element__item__flag__region"><strong>{{item.cityNumber}}</strong></span>
         <div class="element__item__flag__inner">
           <div class="element__item__flag__inner__element"></div>
           <span class="element__item__flag__inner__title"><strong>RUS</strong></span>
@@ -18,8 +19,8 @@
       </div>
     </div>
     <div class="element__item__bottom">
-      <span class="element__item__bottom__city">г. Ростов-на-Дону</span>
-      <span class="element__item__bottom__price">300 000р</span>
+      <span class="element__item__bottom__city">{{item.cityTitle}}</span>
+      <span class="element__item__bottom__price">{{item.priceNumber.slice(0,3)}} {{item.priceNumber.slice(3,6)}} р</span>
     </div>
   </div>
 </template>
